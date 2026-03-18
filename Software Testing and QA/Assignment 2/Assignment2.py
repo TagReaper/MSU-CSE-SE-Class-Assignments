@@ -49,7 +49,7 @@ def AskContinue():
 def CalculateBMI(weight: float, height: float):
     BMI = (weight/(height*height)) * 703
     BMI = round(BMI, 1)
-    if (BMI < 18.4): #18.5 expected
+    if (BMI < 18.5): #18.5 expected
         category = "Underweight"
     elif(BMI < 25):
         category = "Normal Weight"
