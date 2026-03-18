@@ -66,6 +66,7 @@ def main():
     if(AskContinue()):
         main()
     else:
-        print("\nThank you, Goodbye!")
+        print("\nThank you, Goodbye!\n\n")
+        input("Press any key to Exit...")
 
 main()
