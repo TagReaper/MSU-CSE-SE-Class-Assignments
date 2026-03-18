@@ -8,7 +8,7 @@ def AskHeight():
         print(f"Error: '{heightFeet}'  is not a valid Integer. Please enter a Integer value.\n")
         AskHeight()
     try:
-        heightInches = input("Enter your height in Feet (e.g. 5'8\" Input \"8\"): ")
+        heightInches = input("Enter your height in Inches (e.g. 5'8\" Input \"8\"): ")
         heightInches = int(heightInches)
     except ValueError:
         print(f"Error: '{heightInches}'  is not a valid Integer. Please enter a Integer value.\n")
@@ -49,7 +49,7 @@ def CalculateBMI(weight: float, height: float):
     print(f"\nYour BMI is {f'{BMI:.1f}'}, and you are categorized as {category}\n")
 
 def main():
-    print(f"Welcome to the BMI Calculator. \n Please answer these 2 questions.\n")
+    print(f"Welcome to the BMI Calculator. \nPlease answer these questions.\n")
     height = AskHeight()
     weight = AskWeight()
     CalculateBMI(weight, height)
