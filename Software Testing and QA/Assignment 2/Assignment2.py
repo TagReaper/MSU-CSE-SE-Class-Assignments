@@ -1,4 +1,3 @@
-import sys
 
 def AskHeight():
     try:
@@ -68,6 +67,5 @@ def main():
         main()
     else:
         print("\nThank you, Goodbye!")
-        sys.exit(0)
 
 main()
