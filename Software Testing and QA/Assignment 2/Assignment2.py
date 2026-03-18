@@ -48,7 +48,8 @@ def AskContinue():
 
 def CalculateBMI(weight: float, height: float):
     BMI = (weight/(height*height)) * 703
-    if (BMI < 18.5):
+    BMI = round(BMI, 1)
+    if (BMI < 18.4): #18.5 expected
         category = "Underweight"
     elif(BMI < 25):
         category = "Normal Weight"
@@ -56,7 +57,7 @@ def CalculateBMI(weight: float, height: float):
         category = "Overweight"
     else:
         category = "Obese"
-    print(f"\nYour BMI is {f'{BMI:.1f}'}, and you are categorized as {category}\n")
+    print(f"\nYour BMI is {f'{BMI}'}, and you are categorized as {category}\n")
 
 def main():
     print(f"Welcome to the BMI Calculator. \nPlease answer these questions.\n")
