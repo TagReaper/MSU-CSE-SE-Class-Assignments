@@ -7,18 +7,20 @@ def AskHeight():
     except ValueError:
         print(f"Error: '{heightFeet}'  is not a valid Integer. Please enter a Integer value.\n")
         AskHeight()
+    if (heightFeet <= 0):
+        print(f"Error: '{heightFeet}'  is outside of expected values. Please enter new values.\n")
+        AskHeight()
     try:
         heightInches = input("Enter your height in Inches (e.g. 5'8\" Input \"8\"): ")
         heightInches = int(heightInches)
     except ValueError:
         print(f"Error: '{heightInches}'  is not a valid Integer. Please enter a Integer value.\n")
         AskHeight()
-    height = float(heightInches + heightFeet * 12)
-    if (height > 0):
-        return height
-    else:
-        print(f"Error: '{height}'  is not a possible number. Please enter new values.\n")
+    if (heightInches >= 12 or heightInches < 0):
+        print(f"Error: '{heightInches}'  is outside of expected values. Please enter new values.\n")
         AskHeight()
+    height = float(heightInches + heightFeet * 12)
+    return height
 
 def AskWeight():
     try:
