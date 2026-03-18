@@ -32,7 +32,7 @@ def AskWeight():
     if (weight > 0):
         return weight
     else:
-        print(f"Error: '{weight}'  is not a possible number. Please enter new values.\n")
+        print(f"Error: '{weight}'  is not a positive number. Please enter a positive value.\n")
         AskWeight()
 
 def AskContinue():
