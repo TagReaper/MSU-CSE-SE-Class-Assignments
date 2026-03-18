@@ -14,7 +14,11 @@ def AskHeight():
         print(f"Error: '{heightInches}'  is not a valid Integer. Please enter a Integer value.\n")
         AskHeight()
     height = float(heightInches + heightFeet * 12)
-    return height
+    if (height > 0):
+        return height
+    else:
+        print(f"Error: '{height}'  is not a possible number. Please enter new values.\n")
+        AskHeight()
 
 def AskWeight():
     try:
@@ -23,7 +27,11 @@ def AskWeight():
     except ValueError:
         print(f"Error: '{weight}'  is not a valid number. Please enter a numeric value.\n")
         AskWeight()
-    return weight
+    if (weight > 0):
+        return weight
+    else:
+        print(f"Error: '{weight}'  is not a possible number. Please enter new values.\n")
+        AskWeight()
 
 def AskContinue():
     ans = input("Would you like to calculate again? (Y/N): ")
