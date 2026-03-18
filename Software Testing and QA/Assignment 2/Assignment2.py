@@ -1,31 +1,43 @@
-heightFeet = None
-heightInches = None
-weight = None
-BMI = None
+import sys
 
-def Ask():
+def AskHeight():
     try:
         heightFeet = input("Enter your height in Feet (e.g. 5'8\" Input \"5\"): ")
         heightFeet = int(heightFeet)
     except ValueError:
         print(f"Error: '{heightFeet}'  is not a valid Integer. Please enter a Integer value.\n")
-        Ask()
+        AskHeight()
     try:
         heightInches = input("Enter your height in Feet (e.g. 5'8\" Input \"8\"): ")
         heightInches = int(heightInches)
     except ValueError:
         print(f"Error: '{heightInches}'  is not a valid Integer. Please enter a Integer value.\n")
-        Ask()
-    heightInches = float(heightInches + heightFeet * 12)
+        AskHeight()
+    height = float(heightInches + heightFeet * 12)
+    return height
+
+def AskWeight():
     try:
         weight = input("Enter your weight in pounds: ")
         weight = float(weight)
     except ValueError:
         print(f"Error: '{weight}'  is not a valid number. Please enter a numeric value.\n")
-        Ask()
+        AskWeight()
+    return weight
 
-def CalculateBMI():
-    BMI = (weight/(heightInches*heightInches)) * 703
+def AskContinue():
+    ans = input("Would you like to calculate again? (Y/N): ")
+
+    if(ans == "Y"):
+        return True
+    elif(ans == "N"):
+        return False
+    else:
+        print("\nInvalid Response, Please type either \"Y\" or \"N\".")
+        return AskContinue()
+
+def CalculateBMI(weight: float, height: float):
+    BMI = (weight/(height*height)) * 703
     if (BMI < 18.5):
         category = "Underweight"
     elif(BMI < 25):
@@ -34,11 +46,17 @@ def CalculateBMI():
         category = "Overweight"
     else:
         category = "Obese"
-    print(f"\nYour BMI is {f'{BMI:.1f}'}, and you are categorized as {category}")
+    print(f"\nYour BMI is {f'{BMI:.1f}'}, and you are categorized as {category}\n")
 
 def main():
     print(f"Welcome to the BMI Calculator. \n Please answer these 2 questions.\n")
-    Ask()
-    CalculateBMI()
+    height = AskHeight()
+    weight = AskWeight()
+    CalculateBMI(weight, height)
+    if(AskContinue()):
+        main()
+    else:
+        print("\nThank you, Goodbye!")
+        sys.exit(0)
 
 main()
