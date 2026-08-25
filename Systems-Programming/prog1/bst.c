@@ -39,6 +39,7 @@ int rInsert(struct Node **node, int x) {
   if (x > (*node)->x) {
     return rInsert(&((*node)->left), x);
   };
+  return 0;
 };
 
 int insert(struct BST *b, int x) {
