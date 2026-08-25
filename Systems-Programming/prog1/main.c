@@ -1,10 +1,10 @@
-#include <stdio.h> //including standard I/O
+#include "bst.c"
 
 // main function
 int main(){
     //Printing to terminal
-    printf("Hello, World!\n");
-    
-    //Finished Program
-    return 0;
+    struct BST *b = makeBST();
+
+    // Create main.cpp in C
+
 }
