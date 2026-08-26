@@ -35,10 +35,10 @@ int rInsert(struct Node **node, int x) {
   }
   if (x < (*node)->x) {
     return rInsert(&((*node)->left), x);
-  };
+  }
   if (x > (*node)->x) {
-    return rInsert(&((*node)->left), x);
-  };
+    return rInsert(&((*node)->right), x);
+  }
   return 0;
 };
 
@@ -47,4 +47,24 @@ int insert(struct BST *b, int x) {
     return 0;
   }
   return rInsert(&(b->root), x);
-}
+};
+
+int rSearch(struct Node **node, int x) {
+  if (*node == NULL){
+    return 0;
+  }
+  if (x < (*node)->x) {
+    return rSearch(&((*node)->left), x);
+  }
+  if (x < (*node)->x) {
+    return rSearch(&((*node)->right), x);
+  }
+  return 1;
+};
+
+int search(struct BST *b, int x) {
+  if (b == NULL) {
+    return 0;
+  }
+  return rSearch(&(b->root), x);
+};
