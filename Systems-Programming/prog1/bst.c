@@ -84,4 +84,5 @@ int postOrder(struct BST *b) {
     return 0;
   }
   rPostOrder(&(b->root));
+  return 1;
 }
