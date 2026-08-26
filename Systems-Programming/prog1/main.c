@@ -30,4 +30,6 @@ int main(){
     // prints the BST in postorder
     printf("The BST output in postorder is \n");
     postOrder(b);
+
+    dealloc(b);
 }
