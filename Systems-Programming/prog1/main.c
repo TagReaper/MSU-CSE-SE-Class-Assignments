@@ -1,11 +1,12 @@
 #include "bst.c"
 #include <stdio.h>
+#include <string.h>
 
 // main function
 int main(){
     //assigning variables
     struct BST *b = makeBST();
-    int ans;
+    char ans[20];
 
     // Introduction text
     printf("Please enter a series of words to store in a BST\n");
@@ -14,11 +15,11 @@ int main(){
     // Runs until "Stop" is detected
     while (1) {
       //Request an input
-      printf("Num = ");
-      scanf(" %d", &ans);
+      printf("Word = ");
+      scanf("%19s", ans);
 
       // If input is "Stop" then the loop breaks
-      if (ans == 0) {
+      if (!strcmp("STOP", ans)) {
         break;
       }
 

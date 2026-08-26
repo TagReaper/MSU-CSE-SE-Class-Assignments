@@ -1,6 +1,6 @@
 #include "bst.h"
 
-struct Node *makeNode(int x) {
+struct Node *makeNode(char x[20]) {
   struct Node *tmp = NULL;
   tmp = (struct Node *)malloc(sizeof(struct Node));
 
@@ -8,7 +8,7 @@ struct Node *makeNode(int x) {
     return NULL;
   }
 
-  tmp->x = x;
+  strcpy(tmp->x,x);
   tmp->left = NULL;
   tmp->right = NULL;
 
@@ -28,7 +28,7 @@ struct BST *makeBST() {
   return tmp;
 };
 
-int rInsert(struct Node **node, int x) {
+int rInsert(struct Node **node, char x[20]) {
   if (*node == NULL) {
     *node = makeNode(x);
     return 1;
@@ -42,14 +42,14 @@ int rInsert(struct Node **node, int x) {
   return 0;
 };
 
-int insert(struct BST *b, int x) {
+int insert(struct BST *b, char x[20]) {
   if (b == NULL) {
     return 0;
   }
   return rInsert(&(b->root), x);
 };
 
-int rSearch(struct Node **node, int x) {
+int rSearch(struct Node **node, char x[20]) {
   if (*node == NULL){
     return 0;
   }
@@ -62,7 +62,7 @@ int rSearch(struct Node **node, int x) {
   return 1;
 };
 
-int search(struct BST *b, int x) {
+int search(struct BST *b, char x[20]) {
   if (b == NULL) {
     return 0;
   }
@@ -75,7 +75,7 @@ int rPostOrder(struct Node **node) {
   }
   rPostOrder(&((*node)->left));
   rPostOrder(&((*node)->right));
-  printf(" %d ", (*node)->x);
+  printf(" %s ", (*node)->x);
   return 1;
 }
 

@@ -3,7 +3,7 @@
 #include <string.h>
 
 struct Node {
-  int x;
+  char x[20];
   struct Node *left;
   struct Node *right;
 };
