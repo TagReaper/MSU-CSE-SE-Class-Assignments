@@ -1,10 +1,32 @@
 #include "bst.c"
+#include <stdio.h>
 
 // main function
 int main(){
-    //Printing to terminal
+    //assigning variables
     struct BST *b = makeBST();
+    int ans;
 
-    // Create main.cpp in C
+    // Introduction text
+    printf("Please enter a series of words to store in a BST\n");
+    printf("Type 'STOP' to end the series and output the BST in postorder\n");
 
+    // Runs until "Stop" is detected
+    while (1) {
+      //Request an input
+      printf("Num = ");
+      scanf(" %d", &ans);
+
+      // If input is "Stop" then the loop breaks
+      if (ans == 0) {
+        break;
+      }
+
+      // Inserts the value into the BST
+      insert(b, ans);
+    }
+
+    // prints the BST in postorder
+    printf("The BST output in postorder is \n");
+    postOrder(b);
 }

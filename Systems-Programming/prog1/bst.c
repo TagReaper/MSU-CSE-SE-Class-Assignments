@@ -68,3 +68,20 @@ int search(struct BST *b, int x) {
   }
   return rSearch(&(b->root), x);
 };
+
+int rPostOrder(struct Node **node) {
+  if (*node == NULL) {
+    return 0;
+  }
+  rPostOrder(&((*node)->left));
+  rPostOrder(&((*node)->right));
+  printf(" %d ", (*node)->x);
+  return 1;
+}
+
+int postOrder(struct BST *b) {
+  if (b == NULL) {
+    return 0;
+  }
+  rPostOrder(&(b->root));
+}
