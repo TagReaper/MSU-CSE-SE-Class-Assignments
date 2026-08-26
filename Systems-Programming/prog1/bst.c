@@ -75,7 +75,7 @@ int rPostOrder(struct Node **node) {
   }
   rPostOrder(&((*node)->left));
   rPostOrder(&((*node)->right));
-  printf(" %s ", (*node)->x);
+  printf("%s ", (*node)->x);
   return 1;
 }
 
@@ -84,5 +84,42 @@ int postOrder(struct BST *b) {
     return 0;
   }
   rPostOrder(&(b->root));
+  return 1;
+}
+
+int rDealloc(struct Node **node) {
+  if (*node == NULL) {
+    return 0;
+  }
+  rDealloc(&((*node)->left));
+  rDealloc(&((*node)->right));
+  free(*node);
+  *node = NULL;
+  return 1;
+}
+
+int dealloc(struct BST *b) {
+  if (b == NULL) {
+    return 0;
+  }
+  rDealloc(&(b->root));
+  return 1;
+}
+
+int rCopy(struct Node **node, struct BST *b) {
+  if (*node == NULL) {
+    return 0;
+  }
+  insert(b, (*node)->x);
+  rCopy(&((*node)->left), b);
+  rCopy(&((*node)->right), b);
+  return 1;
+}
+
+int copy(struct BST *b) {
+  if (b == NULL) {
+    return 0;
+  }
+  rCopy(&(b->root), b);
   return 1;
 }
