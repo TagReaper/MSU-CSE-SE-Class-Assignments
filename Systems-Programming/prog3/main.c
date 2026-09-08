@@ -17,6 +17,7 @@ int checkError(int val, const char *msg)
 }
 
 int main() {
+  //variable assignment
   int i = 0;
   int fd = 0;
   double arrD[9] = {0};
@@ -33,10 +34,12 @@ int main() {
   double pitch = 0.0;
   double yaw = 0.0;
   ssize_t bytesRd = 0;
-  
+
+  //opens the file
   fd = checkError(open("data.dat",O_RDONLY), "failed to open the file");
   bytesRd = checkError(read(fd, arrD, 9*sizeof(double)), "Failed to read \"data.dat\"");
 
+  //Reads each data entry stored in data.dat
    for (i = 0; i < bytesRd / sizeof(double); i++) {
     switch (i) {
       case 0:
@@ -69,6 +72,8 @@ int main() {
       }
     }
 
+
+  //Temp Printing Data
   printf("Acceleration:\n X: %f\n Y: %f\n Z: %f\n", ax, ay, az);
   printf("Angular Velocity:\n X: %f\n Y: %f\n Z: %f\n", wx, wy, wz);
   printf("Angle:\n Roll: %f\n Pitch: %f\n Yaw: %f\n", roll, pitch, yaw);  
