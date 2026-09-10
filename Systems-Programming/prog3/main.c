@@ -17,10 +17,11 @@ int checkError(int val, const char *msg)
 }
 
 int main() {
-  //variable assignment
+  // Variable assignment
   int i = 0;
   int fd = 0;
   double arrD[9] = {0};
+  double arrW[3] = {0};
   // Acceleration Data
   double ax = 0.0;
   double ay = 0.0;
@@ -34,6 +35,11 @@ int main() {
   double pitch = 0.0;
   double yaw = 0.0;
   ssize_t bytesRd = 0;
+  // Directory Assignment
+  const char *dir_path = "values";
+  const char *accl_path = "values/accl.dat";
+  const char *rota_path = "values/rota.dat";
+  const char *angl_path = "values/angl.dat";
 
   //opens the file
   fd = checkError(open("data.dat",O_RDONLY), "failed to open the file");
@@ -70,13 +76,37 @@ int main() {
         yaw = arrD[i];
         break;
       }
-    }
+   }
 
+  close(fd);
 
-  //Temp Printing Data
-  printf("Acceleration:\n X: %f\n Y: %f\n Z: %f\n", ax, ay, az);
-  printf("Angular Velocity:\n X: %f\n Y: %f\n Z: %f\n", wx, wy, wz);
-  printf("Angle:\n Roll: %f\n Pitch: %f\n Yaw: %f\n", roll, pitch, yaw);  
+  //Directory creation and checking
+  mkdir(dir_path, S_IRWXU);
+
+  // Writing acceleration data
+  fd = checkError(open(accl_path,O_WRONLY | O_CREAT | O_TRUNC, S_IRUSR | S_IWUSR), "failed to open the file");
+
+  checkError(write(fd,&ax,sizeof(double)), "failed to write data");
+  checkError(write(fd,&ay,sizeof(double)), "failed to write data");
+  checkError(write(fd,&az,sizeof(double)), "failed to write data");
+
+  close(fd);
+
+  // Writing rotation data
+  fd = checkError(open(rota_path,O_WRONLY | O_CREAT | O_TRUNC, S_IRUSR | S_IWUSR), "failed to open the file");
+
+  checkError(write(fd,&wx,sizeof(double)), "failed to write data");
+  checkError(write(fd,&wy,sizeof(double)), "failed to write data");
+  checkError(write(fd,&wz,sizeof(double)), "failed to write data");
+
+  close(fd);
+
+  // Writing angle data
+  fd = checkError(open(angl_path,O_WRONLY | O_CREAT | O_TRUNC, S_IRUSR | S_IWUSR), "failed to open the file");
+
+  checkError(write(fd,&roll,sizeof(double)), "failed to write data");
+  checkError(write(fd,&pitch,sizeof(double)), "failed to write data");
+  checkError(write(fd,&yaw,sizeof(double)), "failed to write data");
 
   close(fd);
 
