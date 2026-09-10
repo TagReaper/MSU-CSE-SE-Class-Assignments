@@ -21,7 +21,6 @@ int main() {
   int i = 0;
   int fd = 0;
   double arrD[9] = {0};
-  double arrW[3] = {0};
   // Acceleration Data
   double ax = 0.0;
   double ay = 0.0;
