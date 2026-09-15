@@ -40,7 +40,7 @@ int main() {
   ssize_t bytesRd = 0;
 
   //opens the file
-  fd = checkError(open("accl.dat",O_RDONLY), "failed to open the file");
+  fd = checkError(open("angl.dat",O_RDONLY), "failed to open the file");
   bytesRd = checkError(read(fd, arr, 3*sizeof(double)), "Failed to read \"data.dat\"");
   
   printf("Reading Data...\n\n");
