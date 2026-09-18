@@ -4,7 +4,6 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <time.h>
-#include <errno.h>
 #include <string.h>
 
 //Error checking and response
