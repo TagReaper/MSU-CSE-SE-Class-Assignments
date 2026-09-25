@@ -13,7 +13,8 @@ volatile sig_atomic_t timeout = 0;
 
 sigjmp_buf jump_buffer;
 
-// For Cleaning the Terminal (IDK why, but this skips a question when running the code if it's present, and it freezes if there is no text in the scanf)
+// For Cleaning the Terminal (IDK why, but this freezes if there is no text in
+// the scanf. Not permanantly, just until you give some kind of input though)
 void cleanIO()
 {
   char garbage[100];
