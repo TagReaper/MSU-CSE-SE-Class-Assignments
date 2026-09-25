@@ -175,14 +175,14 @@ int main() {
 
 
           if (timeout) {
-            printf("Time's up.");
+            printf("\nTime's up.\n");
             cleanIO();
           } else if (result == 1 && strcmp(target, lineAns) == 0) {
             int time_remaining = (int)stop_timer();
             printf("Correct: +%d points\n", time_remaining);
             score += time_remaining;
           } else {
-            printf("Incorrect.");
+            printf("Incorrect.\n");
           }
           //After Program
           memset(target, 0, sizeof(target));
