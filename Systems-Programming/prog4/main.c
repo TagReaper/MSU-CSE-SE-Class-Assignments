@@ -40,35 +40,32 @@ int main() {
 
   //opens the file
   fd = checkError(open("angl.dat",O_RDONLY), "failed to open the file");
-  bytesRd = checkError(read(fd, arr, 3*sizeof(double)), "Failed to read \"data.dat\"");
-  
-  printf("Reading Data...\n\n");
-  for (i = 0; i < bytesRd / sizeof(double); i++) {
-    if (arr[i] > -20.0 && arr[i] < 20.0){
-        //Inside Range
-        strcpy(ans,"Inside");
-    } else {
-        //Outside Range
-        strcpy(ans,"Outside");
-    }
-    switch (i) {
-      case 0:
-        printf("Reading Yaw...\n");
-        msSleep(1000);
-        printf("Yaw: %f\nYaw Range: %s\n\n", arr[i], ans);
-        break;
-      case 1:
-        printf("Reading Pitch...\n");
-        msSleep(1000);
-        printf("Pitch: %f\nPitch Range: %s\n\n", arr[i], ans);  
-        break;
-      case 2:
-        printf("Reading Roll...\n");
-        msSleep(1000);
-        printf("Roll: %f\nRoll Range: %s\n\n", arr[i], ans);
-        break;
+  while ((bytesRd = read(fd, arr, 3 * sizeof(double))) > 0) {
+    printf("Reading Data...\n\n");
+    msSleep(1000);
+    for (i = 0; i < bytesRd / sizeof(double); i++) {
+      if (arr[i] > -20.0 && arr[i] < 20.0){
+          //Inside Range
+          strcpy(ans,"Inside");
+      } else {
+          //Outside Range
+          strcpy(ans,"Outside");
       }
+      switch (i) {
+        case 0:
+          printf("Roll: %f   Roll Range: %s\n", arr[i], ans);
+          break;
+        case 1:
+          printf("Pitch: %f   Pitch Range: %s\n", arr[i], ans);  
+          break;
+        case 2:
+          printf("Yaw: %f    Yaw Range: %s\n\n", arr[i], ans);
+          break;
+      }
+    }
   }
+
+  close(fd);
 
   return 1;
 }
