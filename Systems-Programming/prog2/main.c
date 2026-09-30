@@ -17,29 +17,9 @@ int checkError(int val, const char *msg)
 
 
 int main() {
-  int i = 0;
-  int fd = 0;
-  int arr[20] = {0};
+  // Data Arrays
+  unsigned char arr[20];
   double arrD[9] = {0};
-  //Raw Bit Data
-  int axL = 0;
-  int axH = 0;
-  int ayL = 0;
-  int ayH = 0;
-  int azL = 0;
-  int azH = 0;
-  int wxL = 0;
-  int wxH = 0;
-  int wyL = 0;
-  int wyH = 0;
-  int wzL = 0;
-  int wzH = 0;
-  int rollL = 0;
-  int rollH = 0;
-  int pitchL = 0;
-  int pitchH = 0;
-  int yawL = 0;
-  int yawH = 0;
   // Acceleration Data
   double ax = 0.0;
   double ay = 0.0;
@@ -54,131 +34,31 @@ int main() {
   double yaw = 0.0;
   ssize_t bytesRd = 0;
 
-  fd = checkError(open("raw.dat", O_RDONLY), "Failed to open \"Raw.dat\"");
+  int in_fd  = checkError(open("raw.dat", O_RDONLY), "Failed to open raw.dat");
+  int out_fd = checkError(open("data.dat", O_WRONLY | O_CREAT | O_TRUNC, S_IRUSR | S_IWUSR), "Failed to open output");
 
-  bytesRd = checkError(read(fd, arr, 20*sizeof(int)), "Failed to read \"raw.dat\"");
+  while ((bytesRd = read(in_fd, arr, 20)) > 0) {
+    // Assigning Calculations
+    arrD[0] = 16.0 * (short)((arr[3] << 8) | arr[2]) / 32768.0;
+    arrD[1] = 16.0 * (short)((arr[5] << 8) | arr[4]) / 32768.0;
+    arrD[2] = 16.0 * (short)((arr[7] << 8) | arr[6]) / 32768.0;
 
-  for (i = 0; i < bytesRd / sizeof(int); i++) {
-    switch (i) {
-      case 2:
-        axL = arr[i];
-        break;
-      case 3:
-        axH = arr[i];
-        break;
-      case 4:
-        ayL = arr[i];
-        break;
-      case 5:
-        ayH = arr[i];
-        break;
-      case 6:
-        azL = arr[i];
-        break;
-      case 7:
-        azH = arr[i];
-        break;
-      case 8:
-        wxL = arr[i];
-        break;
-      case 9:
-        wxH = arr[i];
-        break;
-      case 10:
-        wyL = arr[i];
-        break;
-      case 11:
-        wyH = arr[i];
-        break;
-      case 12:
-        wzL = arr[i];
-        break;
-      case 13:
-        wzH = arr[i];
-        break;
-      case 14:
-        rollL = arr[i];
-        break;
-      case 15:
-        rollH = arr[i];
-        break;
-      case 16:
-        pitchL = arr[i];
-        break;
-      case 17:
-        pitchH = arr[i];
-        break;
-      case 18:
-        yawL = arr[i];
-        break;
-      case 19:
-        yawH = arr[i];
-        break;
-    }
+    arrD[3] = 2000.0 * (short)((arr[9] << 8) | arr[8]) / 32768.0;
+    arrD[4] = 2000.0 * (short)((arr[11] << 8) | arr[10]) / 32768.0;
+    arrD[5] = 2000.0 * (short)((arr[13] << 8) | arr[12]) / 32768.0;
+
+    arrD[6] = 180.0 * (short)((arr[15] << 8) | arr[14]) / 32768.0;
+    arrD[7] = 180.0 * (short)((arr[17] << 8) | arr[16]) / 32768.0;
+    arrD[8] = 180.0 * (short)((arr[19] << 8) | arr[18]) / 32768.0;
+
+    printf("Acceleration:\n X: %f\n Y: %f\n Z: %f\n", arrD[0], arrD[1], arrD[2]);
+    printf("Angular Velocity:\n X: %f\n Y: %f\n Z: %f\n", arrD[3], arrD[4], arrD[5]);
+    printf("Angle:\n Roll: %f\n Pitch: %f\n Yaw: %f\n\n", arrD[6], arrD[7], arrD[8]);
+
+    checkError(write(out_fd, arrD, sizeof(arrD)), "Failed to write data");
   }
-  //Acceleration Calculations and "signing" data
-  ax = 16.0 * (int16_t)((axH << 8) | axL) / 32768.0;
-  ay = 16.0 * (int16_t)((ayH << 8) | ayL) / 32768.0;
-  az = 16.0 * (int16_t)((azH << 8) | azL) / 32768.0;
+  close(in_fd);
+  close(out_fd);
 
-  //Angular Velocity Calculations and "signing" data
-  wx = 2000.0 * (int16_t)((wxH << 8) | wxL) / 32768.0;
-  wy = 2000.0 * (int16_t)((wyH << 8) | wyL) / 32768.0;
-  wz = 2000.0 * (int16_t)((wzH << 8) | wzL) / 32768.0;
-
-  //Angle Calculations and "signing" data
-  roll = 180.0 * (int16_t)((rollH << 8) | rollL) / 32768.0;
-  pitch = 180.0 * (int16_t)((pitchH << 8) | pitchL) / 32768.0;
-  yaw = 180.0 * (int16_t)((yawH << 8) | yawL) / 32768.0;
-
-  printf("Acceleration:\n X: %f\n Y: %f\n Z: %f\n", ax, ay, az);
-  printf("Angular Velocity:\n X: %f\n Y: %f\n Z: %f\n", wx, wy, wz);
-  printf("Angle:\n Roll: %f\n Pitch: %f\n Yaw: %f\n", roll, pitch, yaw);  
-
-  close(fd);
-
-  //Writing to new file
-
-  fd = checkError(open("data.dat",O_WRONLY | O_CREAT | O_TRUNC, S_IRUSR | S_IWUSR), "failed to open the file");
-
-  for (i = 0; i < 9; i++){
-    switch (i) {
-      case 0:
-        arrD[i] = ax;
-        break;
-      case 1:
-        arrD[i] = ay;
-        break;
-      case 2:
-        arrD[i] = az;
-        break;
-      case 3:
-        arrD[i] = wx;
-        break;
-      case 4:
-        arrD[i] = wy;
-        break;
-      case 5:
-        arrD[i] = wz;
-        break;
-      case 6:
-        arrD[i] = roll;
-        break;
-      case 7:
-        arrD[i] = pitch;
-        break;
-      case 8:
-        arrD[i] = yaw;
-        break;
-    }
-  }
-
-  for (i = 0; i < 9; i++)
-    {
-      checkError(write(fd,&arrD[i],sizeof(double)), "failed to write data");
-    }
-
-  close(fd);
-
-  return 0;
+  return 1;
 }
