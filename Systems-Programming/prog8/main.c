@@ -7,9 +7,7 @@
 #include <string.h>
 #include <termios.h>
 #include <sys/time.h>
-#include <signal.h>
 #include <sys/wait.h>
-#include <errno.h>
 
 int checkError(int val, const char *msg)
 {
@@ -48,10 +46,18 @@ int main() {
   bytesRd = checkError(read(fd, data, 60 * sizeof(int)),"Failed to read data from file...");
   close(fd);
 
-  printf("---Values---\n");
+  printf("---Values---");
   for (int a = 0; a < 60; a++) {
-    printf("%d\n", data[a]);
-    sum += data[a];
+    if (a % 5 == 0) {
+      printf("\n");
+    }
+    if (a == 59) {
+      printf("%d\n", data[a]);
+      sum += data[a];
+    }else {
+      printf("%d, ", data[a]);
+      sum += data[a];
+    }
   }
   mean = (float)sum/60.0;
   printf("---End of Values---\n\nMean: %f\n", mean);

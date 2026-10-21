@@ -16,7 +16,9 @@ int checkError(int val, const char *msg)
 
 int main() {
   //1. Generate a new file name dataX.dat where X is a random number between 0 and 255.
-  srand(time(NULL));
+  struct timespec ts;
+  timespec_get(&ts, TIME_UTC);
+  srand(time(NULL) * ts.tv_nsec);
   int x = rand() % 256;
 
   char file_name[15];
