@@ -85,6 +85,9 @@ void *player(void *pnum) {
 
     // Forever-loop
     while (1) {
+      // Lock Player Mutex
+      pthread_mutex_lock(&mtx[playerNum]);
+
       // Guess calculations and store in guess[]
       switch (playerNum) {
         case 0:
@@ -95,13 +98,11 @@ void *player(void *pnum) {
           break;
       }
 
-      // Lock Player Mutex
-      pthread_mutex_lock(&mtx[playerNum]);
-
       // Looping for player cond-var
       while (!rdy[playerNum]) {
         pthread_cond_wait(&cnd[playerNum], &mtx[playerNum]);
       }
+      rdy[playerNum] = 0;
 
       // Unlocking Player Mutex
       pthread_mutex_unlock(&mtx[playerNum]);
@@ -135,7 +136,7 @@ void *referee() {
     pthread_mutex_unlock(&mtx[2]);
 
     // Print game Statistics
-    printf("\n=== Game %d of 10 === (Score P1/P2: %d/%d)\n", a, wins[0], wins[1]);
+    printf("\n\n=== Game %d of 10 === (Score P1/P2: %d/%d)\n\n", a, wins[0], wins[1]);
 
     int round = 0;
     while (1) {
