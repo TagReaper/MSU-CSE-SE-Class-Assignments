@@ -15,6 +15,8 @@ int checkError(int val, const char *msg)
   return val;
 }
 
+// Don't feel like commenting this time ngl
+
 void child(int fd[2]) {
   close(fd[0]);
   checkError(dup2(fd[1], STDOUT_FILENO), "Failed dup2...");
