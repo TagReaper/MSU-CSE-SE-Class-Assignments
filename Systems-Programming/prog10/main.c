@@ -16,11 +16,38 @@ int checkError(int val, const char *msg)
 }
 
 void child(int fd[2]) {
-  
+  close(fd[0]);
+  checkError(dup2(fd[1], STDOUT_FILENO), "Failed dup2...");
+  close(fd[1]);
+
+  char *args[] = {"rand", "-c", "50", "-m", "200", "-M", "500", NULL};
+  checkError(execvp("./rand", args), "Failed execution of rand...");
 }
 
 void parent(int fd[2]) {
-  
+  int sum = 0;
+  int count = 0;
+  int value;
+  ssize_t n;
+
+  close(fd[1]);
+
+  while (1) {
+    n = read(fd[0], &value, sizeof(int));
+
+    if (n == 0 || n == -1) {
+      break;
+    }
+    count++;
+    printf("#%d: %d\n", count, value);
+    sum += value;
+  }
+
+  close(fd[0]);
+  wait(NULL);
+
+  printf("Total: %d\n", sum);
+  printf("Average: %f\n", (double)sum/count);
 }
 
 int main() {
