@@ -90,14 +90,35 @@ void child_main(int playerNum) {
 // Referee Function
 void referee() {
   // Setting win array
-  int wins[2] = {0, 0};
+  int wins[2];
+  int cmp[2];
 
   // Internal Mechanism
   for (int a = 1; a <= 10; a++) {
     int target = rand() % 100 + 1;
     int round = 0;
     while (1) {
-      break;
+      // Setting cmp
+      // player1 guess (Replace)
+      // player2 guess (Replace)
+
+      int end = cmp[0] == 0 || cmp[1] == 0;
+      if (end) {
+        if (cmp[0] == 0) {
+          wins[0]++;
+        }
+        if (cmp[1] == 0) {
+          wins[1]++;
+        }
+        cmp[0] = 0;
+        cmp[1] = 0;
+      }
+
+      // Checking if game is ended, and printing the winner
+      if (end) {
+        printf("   Target was %d\n\n", target);
+        break;
+      }
     }
   }
 
