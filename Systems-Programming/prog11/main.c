@@ -106,7 +106,13 @@ void child_main(int playerNum) {
           break;
       }
 
+      // Sending guess to referee
+      checkError(write(wfd, &guess, sizeof(int)), "Failed to write to Referee...");
+
       // Comparison Check
+      int cmp = 0;
+      checkError(read(rfd, &cmp, sizeof(int)), "Failed to read from the Referee...");
+      
       
     }
   }
