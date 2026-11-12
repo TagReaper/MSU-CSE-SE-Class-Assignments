@@ -8,6 +8,16 @@
 #include <sys/time.h>
 #include <sys/wait.h>
 
+// Defining Names
+#define R_P1 "referee_to_player1"
+#define R_P2 "referee_to_player2"
+#define P1_R "player1_to_referee"
+#define P2_R "player2_to_referee"
+
+char *R_TO_P[2] = {R_P1, R_P2};
+char *P_TO_R[2] = {P1_R, P2_R};
+
+
 // Error Checking
 int checkError(int val, const char *msg)
 {
@@ -27,6 +37,12 @@ void referee();
 int main() {
   // Variables
   pid_t ids[3];
+
+  mkfifo(R_P1, S_IRUSR | S_IWUSR);
+  mkfifo(R_P2, S_IRUSR | S_IWUSR);
+  mkfifo(P1_R, S_IRUSR | S_IWUSR);
+  mkfifo(P2_R, S_IRUSR | S_IWUSR);
+
 
   // Seeding the random number generator
   struct timespec ts;
@@ -53,15 +69,25 @@ int main() {
     exit(0);
   }
 
+
+  // Clean up
   waitpid(ids[0], NULL, 0);
   waitpid(ids[1], NULL, 0);
   waitpid(ids[2], NULL, 0);
+
+  unlink(R_P1);
+  unlink(P1_R);
+  unlink(R_P2);
+  unlink(P2_R);
 
   return 0;
 }
 
 // Child-Player Function
 void child_main(int playerNum) {
+  int rfd = checkError(open(R_TO_P[playerNum], O_RDONLY), "Player open read failed...");
+  int wfd = checkError(open(P_TO_R[playerNum], O_WRONLY), "Player open write failed...");
+
   // Forever Loop
   while (1) {
     // Setting min and max
