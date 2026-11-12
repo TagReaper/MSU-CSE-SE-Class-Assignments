@@ -38,104 +38,24 @@ void msSleep(long miliseconds){
 }
 
 // Function Assignment
-void child_main(int playerNum);
 void referee();
 
 // Main Function
 int main() {
-  // Variables
-  pid_t ids[3];
-
   mkfifo(R_P1, S_IRUSR | S_IWUSR);
   mkfifo(R_P2, S_IRUSR | S_IWUSR);
   mkfifo(P1_R, S_IRUSR | S_IWUSR);
   mkfifo(P2_R, S_IRUSR | S_IWUSR);
-  
-  // Main Function Spawning
-  for (int id = 0; id <= 1; id++) {
-    pid_t p = fork();
 
-    if (p < 0) {
-      exit(1);
-    }
-    if (p == 0) {
-      child_main(id);
-      exit(0);
-    }
-    ids[id] = p;
-  }
-
-  ids[2] = checkError(fork(), "Referee Fork Failed.");
-  if (ids[2] == 0) {
-    referee();
-    exit(0);
-  }
-
+  referee();
 
   // Clean up
-  waitpid(ids[0], NULL, 0);
-  waitpid(ids[1], NULL, 0);
-  waitpid(ids[2], NULL, 0);
-
   unlink(R_P1);
   unlink(P1_R);
   unlink(R_P2);
   unlink(P2_R);
 
   return 0;
-}
-
-// Child-Player Function
-void child_main(int playerNum) {
-  // Seeding rng
-  srand(time(NULL) ^ getpid());
-
-  // Setting FIFOs + EndVar
-  int rfd = checkError(open(R_TO_P[playerNum], O_RDONLY), "Player open read failed...");
-  int wfd = checkError(open(P_TO_R[playerNum], O_WRONLY), "Player open write failed...");
-  int final = 0;
-
-  // Forever Loop
-  while (1) {
-    // Setting min and max
-    int min = 1;
-    int max = 100;
-
-    // Forever-loop
-    while (1) {
-      int guess = 0;
-      // Guess calculations
-      switch (playerNum) {
-        case 0:
-          guess = (max+min)/2;
-          break;
-        case 1:
-          guess = min + rand() % (max - min + 1);
-          break;
-      }
-
-      // Sending guess to referee
-      checkError(write(wfd, &guess, sizeof(int)), "Failed to write to Referee...");
-
-      // Comparison Check
-      int cmp = 0;
-      checkError(read(rfd, &cmp, sizeof(int)), "Failed to read from the Referee...");
-      
-      if (cmp < 0) {
-        min = guess + 1;
-      } else if (cmp > 0) {
-        max = guess - 1;
-      } else {
-        break;
-      }
-    }
-    checkError(read(rfd, &final, sizeof(int)), "Failed to read from the Referee...");
-    if (final == END) {
-      break;
-    }
-  }
-  close(rfd);
-  close(wfd);
 }
 
 // Referee Function
@@ -168,7 +88,6 @@ void referee() {
       checkError(read(rP2, &guess[1], sizeof(int)), "Player 2 read failed...");
 
       // Printing Guesses
-      round++;
       printf("   Round %d: P1 guessed %d, P2 guessed %d\n\n", round, guess[0], guess[1]);
 
       // Setting cmp
