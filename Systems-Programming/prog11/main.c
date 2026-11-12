@@ -17,7 +17,6 @@
 char *R_TO_P[2] = {R_P1, R_P2};
 char *P_TO_R[2] = {P1_R, P2_R};
 
-
 // Error Checking
 int checkError(int val, const char *msg)
 {
@@ -111,6 +110,8 @@ void child_main(int playerNum) {
       
     }
   }
+  close(rfd);
+  close(wfd);
 }
 
 // Referee Function
@@ -118,15 +119,25 @@ void referee() {
   // Setting win array
   int wins[2];
   int cmp[2];
+  int guess[2];
+
+  int rP1 = checkError(open(R_TO_P[0], O_RDONLY), "Failed to open P1 read...");
+  int wP1 = checkError(open(P_TO_R[0], O_WRONLY), "Failed to open P1 write...");
+  int rP2 = checkError(open(R_TO_P[1], O_RDONLY), "Failed to open P2 read...");
+  int wP2 = checkError(open(P_TO_R[1], O_WRONLY), "Failed to open P2 write...");
 
   // Internal Mechanism
   for (int a = 1; a <= 10; a++) {
     int target = rand() % 100 + 1;
     int round = 0;
     while (1) {
+      // Reading Guesses
+      checkError(read(rP1, &guess[0], sizeof(int)), "Player 1 read failed...");
+      checkError(read(rP2, &guess[0], sizeof(int)), "Player 2 read failed...");
+
       // Setting cmp
-      // player1 guess (Replace)
-      // player2 guess (Replace)
+      cmp[0] = guess[0] - target;
+      cmp[1] = guess[1] - target;
 
       int end = cmp[0] == 0 || cmp[1] == 0;
       if (end) {
